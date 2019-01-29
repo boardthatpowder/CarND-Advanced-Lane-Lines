@@ -68,7 +68,7 @@ Example images:
 
 #### 1. Provide an example of a distortion-corrected image.
 
-Within my method _distortion_correction()_ I use _cv2.undistort()_ along with my previously calculated distortion coefficients and camera matrix to correct the distortion of images.
+Within the method _distortion_correction()_ I use _cv2.undistort()_ along with my previously calculated distortion coefficients and camera matrix to correct the distortion of images.
 
 Example images:
 
@@ -80,7 +80,7 @@ Example images:
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-Within my _thresholded_binary_image()_ method I create a thresholded binary image using the following steps:
+Within the _thresholded_binary_image()_ method I create a thresholded binary image using the following steps:
 - convert undistorted image to HLS color space, and extract the S channel
 - convert undistorted image to gray scale, and use this to generate a sobelx image
 - using (different) thresholds for both the S and sobelx images, filter out uninteresting pixels
@@ -135,7 +135,7 @@ Example images:
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-My methods _fit_to_lane_boundary()_ and _fit_to_lane_boundary_prior()_ are responsible for identifying the lane-line pixels.
+The methods _fit_to_lane_boundary()_ and _fit_to_lane_boundary_prior()_ are responsible for identifying the lane-line pixels.
 
 The first method uses the sliding windows approach to identify lanes by:
 
@@ -148,8 +148,8 @@ The second method is not used in the image processing pipeline, but is used in t
 
 Example images:
 
-Warped | Masked | Warped |
-:---:|:----:|:----:
+Warped | Masked | 
+:---:|:----:
 | ![warped][straight_warped] | ![lane_boundaries][straight_lane_boundaries] | 
 | ![warped][test1_warped] | ![lane_boundaries][test1_lane_boundaries] |
 
@@ -173,7 +173,7 @@ The method _overlay_original_image()_ adds the detected lane lines to the origin
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](output_images/project_video.mp4)
 
 ---
 
@@ -181,4 +181,17 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+##### Perspective Transformation
+
+The closer the distance to the horizon I use to perform the perspective transformation, the greater the possibly error due to the resolution of the image and/or surrounding objects.  This can be improved by reducing the distance (not ideal), increasing the resolution, or perhaps applying a variable region of interest mask to help separate the distant lane from surrounding objects.
+
+##### Lane Changes
+
+The fitting of the polynomials assumes that the left side of the lane is located to the left of the midpoint, and and the right hand side of the lane located to the right.  During changing lanes, this rule may no longer apply as one side of a lane passes from one side of the midpoint to another.  It is even possible that only one side of a lane may be visible during changing lanes.  This could be improved by removing the assumption that the vehicle is located near the midpoint of a lane, and adding intelligence to detect multiple lanes during changing.
+
+##### Road Texture
+
+A change in road materials, such as freshly laid new tarmac, may affect lane detection.  This could be improved by altering the threshold binary image generation to exclude perceived vertical lines in the road where line markings do not exist.
+
+
+
