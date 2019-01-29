@@ -19,11 +19,13 @@ The goals / steps of this project are the following:
 [straight_original]: ./test_images/straight_lines1.jpg "Original"
 [straight_undistorted]: ./output_images/straight_lines1-undistorted.jpg "Undistorted"
 [straight_thresholded]: ./output_images/straight_lines1-thresholded_binary.jpg "Thresholded Binary"
+[straight_masked]: ./output_images/straight_lines1-masked.jpg "Masked"
 [straight_warped]: ./output_images/straight_lines1-warped.jpg "Warped"
 
 [test1_original]: ./test_images/test1.jpg "Original"
 [test1_undistorted]: ./output_images/test1-undistorted.jpg "Undistorted"
 [test1_thresholded]: ./output_images/test1-thresholded_binary.jpg "Thresholded Binary"
+[test1_masked]: ./output_images/test1-masked.jpg "Masked"
 [test1_warped]: ./output_images/test1-warped.jpg "Warped"
 
 
