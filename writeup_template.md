@@ -120,7 +120,7 @@ Before applying the perspective transform, note that I also mask the image based
 Example images:
 
 | Thresholded Binary | Masked | Warped |
-:---:|:----:
+:---:|:----:|:----:
 | ![thresholded][straight_thresholded] | ![masked][straight_masked] | ![warped][straight_warped] | 
 | ![thresholded][test1_thresholded] | ![masked][test1_masked] | ![warped][test1_warped] | 
 
