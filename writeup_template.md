@@ -18,9 +18,13 @@ The goals / steps of this project are the following:
 
 [straight_original]: ./test_images/straight_lines1.jpg "Original"
 [straight_undistorted]: ./output_images/straight_lines1-undistorted.jpg "Undistorted"
+[straight_thresholded]: ./output_images/straight_lines1-thresholded_binary.jpg "Thresholded Binary"
+[straight_warped]: ./output_images/straight_lines1-warped.jpg "Warped"
 
 [test1_original]: ./test_images/test1.jpg "Original"
 [test1_undistorted]: ./output_images/test1-undistorted.jpg "Undistorted"
+[test1_thresholded]: ./output_images/test1-thresholded_binary.jpg "Thresholded Binary"
+[test1_warped]: ./output_images/test1-warped.jpg "Warped"
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -47,8 +51,9 @@ Once calculated, I then use _cv2.undistort()_ to generate an undistorted view of
 
 Example images: 
 
-![original][camera_cal1]
-![undistorted][camera_cal2]
+| Original | Distortion Corrected |
+:---:|:----:
+| ![original][camera_cal1] | ![undistorted][camera_cal2] | 
 
 ### Pipeline (test images)
 
@@ -66,39 +71,58 @@ Example images:
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+Within my _thresholded_binary_image()_ method I create a thresholded binary image using the following steps:
+- convert undistorted image to HLS color space, and extract the S channel
+- convert undistorted image to gray scale, and use this to generate a sobelx image
+- using (different) thresholds for both the S and sobelx images, filter out uninteresting pixels
+- combine the above to create a thresholded binary image
 
-![alt text][image3]
+Example images:
+
+| Distortion Corrected | Thresholded Binary |
+:---:|:----:
+| ![undistorted][straight_undistorted] | ![thresholded][straight_thresholded] | 
+| ![undistorted][test1_undistorted] | ![thresholded][test1_thresholded] | 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+Within the section titled _Perspective Transformation_ I have a method _perspective_transform_ which applies a persepctive transform to an image giving a camera matrix, along with another section of code I used to manually identify my source points and define my destination points.
+
+I chose the hardcode the source and destination points in the following manner:
 
 ```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
+top_right_point=(667, 440)
+bottom_right_point=(1105, 720)
+bottom_left_point=(205,720)
+top_left_point=(611, 440)
+
+src = np.float32([
+    top_left_point,
+    top_right_point,
+    bottom_right_point,
+    bottom_left_point
+ ])
+ 
+offset=350
+h=img.shape[0]
+w=img.shape[1]
+
+dst = np.float32([
+    [offset, 0], 
+    [w-offset, 0], 
+    [w-offset, h], 
+    [offset, h]
+])
 ```
 
-This resulted in the following source and destination points:
+Before applying the perspective transform, note that I also mask the image based on a region of interest I also manually defined.
 
-| Source        | Destination   | 
-|:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+Example images:
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
-![alt text][image4]
+| Thresholded Binary | Masked | Warped |
+:---:|:----:
+| ![thresholded][straight_thresholded] | ![masked][straight_masked] | ![warped][straight_warped] | 
+| ![thresholded][test1_thresholded] | ![masked][test1_masked] | ![warped][test1_warped] | 
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
