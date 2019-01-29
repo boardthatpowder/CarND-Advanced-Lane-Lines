@@ -18,15 +18,23 @@ The goals / steps of this project are the following:
 
 [straight_original]: ./test_images/straight_lines1.jpg "Original"
 [straight_undistorted]: ./output_images/straight_lines1-undistorted.jpg "Undistorted"
+[straight_colored]: ./output_images/straight_lines1-colored_binary.jpg "Colored Binary"
 [straight_thresholded]: ./output_images/straight_lines1-thresholded_binary.jpg "Thresholded Binary"
 [straight_masked]: ./output_images/straight_lines1-masked.jpg "Masked"
 [straight_warped]: ./output_images/straight_lines1-warped.jpg "Warped"
+[straight_lane_boundaries]: ./output_images/straight_lines1-lane_boundaries.jpg "Lane Boundaries"
+[straight_result]: ./output_images/straight_lines1-result.jpg "Result"
 
 [test1_original]: ./test_images/test1.jpg "Original"
 [test1_undistorted]: ./output_images/test1-undistorted.jpg "Undistorted"
+[test1_colored]: ./output_images/test1-colored_binary.jpg "Colored Binary"
 [test1_thresholded]: ./output_images/test1-thresholded_binary.jpg "Thresholded Binary"
 [test1_masked]: ./output_images/test1-masked.jpg "Masked"
 [test1_warped]: ./output_images/test1-warped.jpg "Warped"
+[test1_lane_boundaries]: ./output_images/test1-lane_boundaries.jpg "Lane Boundaries"
+[test1_result]: ./output_images/test1-result.jpg "Result"
+
+]: ./output_images/test1-lane_boundaries.jpg "Lane Boundaries"
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -79,12 +87,12 @@ Within my _thresholded_binary_image()_ method I create a thresholded binary imag
 - using (different) thresholds for both the S and sobelx images, filter out uninteresting pixels
 - combine the above to create a thresholded binary image
 
-Example images:
+Example images (note that the thresholded image has been colorized to show the 2 different underlying combined images):
 
 | Distortion Corrected | Thresholded Binary |
 :---:|:----:
-| ![undistorted][straight_undistorted] | ![thresholded][straight_thresholded] | 
-| ![undistorted][test1_undistorted] | ![thresholded][test1_thresholded] | 
+| ![undistorted][straight_undistorted] | ![thresholded][straight_colored] | 
+| ![undistorted][test1_undistorted] | ![thresholded][test1_colored] | 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
@@ -128,19 +136,37 @@ Example images:
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+My methods _fit_to_lane_boundary()_ and _fit_to_lane_boundary_prior()_ are responsible for identifying the lane-line pixels.
 
-![alt text][image5]
+The first method uses the sliding windows approach to identify lanes by:
+
+- generating a histogram of the bottom half of the (warped thresholded) image
+- identifying the x positions, to the left and right of the midpoint, where the maximum nonzero pixels are located
+- using sliding windows (9 high in total), traverse up the image to each side of the midpoint, identifying the non zero pixels in the window
+- fit a second order polynomial to the extracted left and right pixel positions
+
+The second method is not used in the image processing pipeline, but is used in the video processing pipeline.  This method instead of using sliding windows, searches within a pre-defined margin of the last known fitted polynomial to descrease processing time.
+
+Example images:
+
+Warped | Masked | Warped |
+:---:|:----:|:----:
+| ![warped][straight_warped] | ![lane_boundaries][straight_lane_boundaries] | 
+| ![warped][test1_warped] | ![lane_boundaries][test1_lane_boundaries] |
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+The method _measure_curvature()_ measures the curvature of the left and right detected lane lines.
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
+The method _overlay_original_image()_ adds the detected lane lines to the original image by first inverse warping the detected polynomials using _cv2.warpPerspective()_, then constructing a new image using _cv2.addWeighted()_ to add the inverse warped polynomials to the original image.
 
-![alt text][image6]
+
+| Original | Lane Detection |
+:---:|:----:
+| ![original][straight_original] | ![result][straight_result] | 
+| ![original][test1_original] | ![result][test1_result] |
 
 ---
 
