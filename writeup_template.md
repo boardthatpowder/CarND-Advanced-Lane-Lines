@@ -59,7 +59,7 @@ Within my method _distortion_correction()_ I use _cv2.undistort()_ along with my
 Example images:
 
 | Original | Distortion Corrected |
-:---:----:
+:---:|:----:
 | ![original][straight_original] | ![undistorted][straight_undistorted] | 
 | ![original][test1_original] | ![undistorted][test1_undistorted] | 
 
