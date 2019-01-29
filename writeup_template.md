@@ -18,7 +18,7 @@ The goals / steps of this project are the following:
 
 [straight_original]: ./test_images/straight_lines1.jpg "Original"
 [straight_undistorted]: ./output_images/straight_lines1-undistorted.jpg "Undistorted"
-[straight_colored]: ./output_images/straight_lines1-colored_binary.jpg "Colored Binary"
+[straight_colored]: ./output_images/straight_lines1-color_binary.jpg "Colored Binary"
 [straight_thresholded]: ./output_images/straight_lines1-thresholded_binary.jpg "Thresholded Binary"
 [straight_masked]: ./output_images/straight_lines1-masked.jpg "Masked"
 [straight_warped]: ./output_images/straight_lines1-warped.jpg "Warped"
@@ -27,14 +27,13 @@ The goals / steps of this project are the following:
 
 [test1_original]: ./test_images/test1.jpg "Original"
 [test1_undistorted]: ./output_images/test1-undistorted.jpg "Undistorted"
-[test1_colored]: ./output_images/test1-colored_binary.jpg "Colored Binary"
+[test1_colored]: ./output_images/test1-color_binary.jpg "Colored Binary"
 [test1_thresholded]: ./output_images/test1-thresholded_binary.jpg "Thresholded Binary"
 [test1_masked]: ./output_images/test1-masked.jpg "Masked"
 [test1_warped]: ./output_images/test1-warped.jpg "Warped"
 [test1_lane_boundaries]: ./output_images/test1-lane_boundaries.jpg "Lane Boundaries"
 [test1_result]: ./output_images/test1-result.jpg "Result"
 
-]: ./output_images/test1-lane_boundaries.jpg "Lane Boundaries"
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
